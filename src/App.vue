@@ -1,60 +1,95 @@
 <template>
   <div class="header">
     <ul class="header-button-left">
-      <li>Cancel</li>
+      <li @click="step = 0">Cancel</li>
     </ul>
 
     <ul class="header-button-right">
-      <li>Next</li>
+      <li v-if="step == 1" @click="step++">Next</li>
+      <li v-if="step == 2" @click="publish">Publish</li>
     </ul>
 
     <img src="./assets/logo.png" class="logo" />
   </div>
 
-  <Container :data="data"/>
-  <button @click="more">더보기</button>
+  <Container
+    @write="작성한글 = $event"
+    :data="data"
+    :step="step"
+    :이미지="이미지"
+  />
 
+  <button v-if="step == 0" @click="more">더보기</button>
 
   <div class="footer">
     <ul class="footer-button-plus">
-      <input type="file" id="file" class="inputfile" />
+      <input @change="upload" type="file" id="file" class="inputfile" />
       <label for="file" class="input-plus">+</label>
     </ul>
- </div>
+  </div>
 </template>
 
-
 <script>
-import Container from './components/Container.vue'
-import data from './assets/data.js'
-import axios from 'axios'
-axios.post()
+import Container from "./components/Container.vue";
+import data from "./assets/data.js";
+import axios from "axios";
+axios.post();
 
 export default {
-  name: 'App',
-  data(){
-    return{
-      data : data,
-      counter : 0,
-    }
+  name: "App",
+  data() {
+    return {
+      data: data,
+      step: 0,
+      counter: 0,
+      이미지: "",
+      작성한글: "",
+    };
+  },
+  mounted() {
+    this.emitter.on("작명", (a) => {
+      console.log(a);
+    });
   },
   components: {
     Container,
   },
-  methods : {
-    more(){
-      axios.get(`https://codingapple1.github.io/vue/more${this.counter}.json`)
-      .then((result)=>{
-        this.data.push(result.data);
-        this.counter++;
-      })
-    }
+  methods: {
+    publish() {
+      var myData = {
+        name: "Kim Hyun",
+        userImage: "https://placeimg.com/100/100/arch",
+        postImage: this.이미지,
+        likes: 36,
+        date: "May 15",
+        liked: false,
+        content: this.작성한글,
+        filter: "perpetua",
+      };
+      this.data.unshift(myData);
+      this.step = 0;
+    },
+    more() {
+      axios
+        .get(`https://codingapple1.github.io/vue/more${this.counter}.json`)
+        .then((result) => {
+          this.data.push(result.data);
+          this.counter++;
+        });
+    },
+    upload(e) {
+      let 파일 = e.target.files;
+      console.log(파일[0]);
+      let url = URL.createObjectURL(파일[0]);
+      console.log(url);
+      this.이미지 = url;
+      this.step++;
+    },
   },
-}
+};
 </script>
 
 <style>
-
 body {
   margin: 0;
 }

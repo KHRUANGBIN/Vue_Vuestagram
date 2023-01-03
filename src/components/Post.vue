@@ -2,24 +2,28 @@
   <div class="post">
     <div class="post-header">
       <div class="profile"></div>
-      <span class="profile-name">{{data.name}}</span>
+      <span class="profile-name">{{ data.name }}</span>
     </div>
-    <div class="post-body" :style="{ backgroundImage : `url(${data.postImage})` }"></div>
+    <div
+      class="post-body"
+      :style="{ backgroundImage: `url(${data.postImage})` }"
+    ></div>
     <div class="post-content">
-      <p>{{data.likes}}</p>
-      <p><strong>{{data.name}}</strong> {{data.content}}</p>
-      <p class="date">{{data.date}}</p>
+      <p>{{ data.likes }}</p>
+      <p>
+        <strong>{{ data.name }}</strong> {{ data.content }}
+      </p>
+      <p class="date">{{ data.date }}</p>
     </div>
-</div> 
+  </div>
 </template>
 
 <script>
-
 export default {
   props: {
-    data : Array,
-  }
-}
+    data: Array,
+  },
+};
 </script>
 
 <style>
@@ -60,5 +64,5 @@ export default {
   font-size: 11px;
   color: grey;
   margin-top: -8px;
-} 
+}
 </style>
